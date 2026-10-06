@@ -8,8 +8,6 @@ st.title("Data App Assignment, on July 14th")
 st.write("### Input Data and Examples")
 df = pd.read_csv("Superstore_Sales_utf8.csv", parse_dates=True)
 st.dataframe(df)
-st.write(df.index.dtype)
-st.write(sales_by_month.head())
 
 # This bar chart will not have solid bars--but lines--because the detail data is being graphed independently
 st.bar_chart(df, x="Category", y="Sales")
@@ -88,3 +86,6 @@ else:
         f"Delta compares against the overall average profit margin of "
         f"{overall_profit_margin:.2f}% across all products in all categories."
 )
+
+st.write(df.index.dtype)
+st.write(sales_by_month.head())
