@@ -58,12 +58,12 @@ else:
 
 # (3) show a line chart of sales for the selected items in (2)
 # Order_Date is already the index, so Grouper can resample it by month
-    filtered_sales_by_month = (
-        filtered.filter(items=["Sales"]).groupby(pd.Grouper(freq="M")).sum()
-    )
+filtered_sales_by_month = (
+    filtered.filter(items=["Sales"]).groupby(pd.Grouper(freq="M")).sum()
+)
  
-    st.write("### Monthly sales for the selected Sub-Categories")
-    st.line_chart(filtered_sales_by_month, y="Sales")
+st.write("### Monthly sales for the selected Sub-Categories")
+st.line_chart(filtered_sales_by_month, y="Sales")
 
 # (4) show three metrics
 # Three metrics: total sales, total profit, overall profit margin
@@ -76,16 +76,16 @@ profit_margin = (total_profit / total_sales * 100) if total_sales else 0
 overall_profit_margin = df["Profit"].sum() / df["Sales"].sum() * 100
 margin_delta = profit_margin - overall_profit_margin
  
-    st.write("### Metrics for the selected Sub-Categories")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Sales", f"${total_sales:,.2f}")
-    col2.metric("Total Profit", f"${total_profit:,.2f}")
-    col3.metric(
-        "Overall Profit Margin",
-        f"{profit_margin:.2f}%",
-        delta=f"{margin_delta:.2f}%",
-    )
-    st.caption(
-        f"Delta compares against the overall average profit margin of "
-        f"{overall_profit_margin:.2f}% across all products in all categories."
-    )
+st.write("### Metrics for the selected Sub-Categories")
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Sales", f"${total_sales:,.2f}")
+col2.metric("Total Profit", f"${total_profit:,.2f}")
+col3.metric(
+    "Overall Profit Margin",
+    f"{profit_margin:.2f}%",
+    delta=f"{margin_delta:.2f}%",
+)
+st.caption(
+    f"Delta compares against the overall average profit margin of "
+    f"{overall_profit_margin:.2f}% across all products in all categories."
+)
