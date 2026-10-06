@@ -7,6 +7,7 @@ st.title("Data App Assignment, on July 14th")
 
 st.write("### Input Data and Examples")
 df = pd.read_csv("Superstore_Sales_utf8.csv", parse_dates=True)
+st.write(df.dtypes)
 st.dataframe(df)
 
 # This bar chart will not have solid bars--but lines--because the detail data is being graphed independently
