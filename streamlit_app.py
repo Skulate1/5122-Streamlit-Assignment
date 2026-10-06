@@ -30,8 +30,62 @@ st.dataframe(sales_by_month)
 st.line_chart(sales_by_month, y="Sales")
 
 st.write("## Your additions")
-st.write("### (1) add a drop down for Category (https://docs.streamlit.io/library/api-reference/widgets/st.selectbox)")
-st.write("### (2) add a multi-select for Sub_Category *in the selected Category (1)* (https://docs.streamlit.io/library/api-reference/widgets/st.multiselect)")
-st.write("### (3) show a line chart of sales for the selected items in (2)")
-st.write("### (4) show three metrics (https://docs.streamlit.io/library/api-reference/data/st.metric) for the selected items in (2): total sales, total profit, and overall profit margin (%)")
-st.write("### (5) use the delta option in the overall profit margin metric to show the difference between the overall average profit margin (all products across all categories)")
+
+# (1) add a drop down for Category 
+category = st.selectbox(
+    "Select a Category",
+    sorted(df["Category"].unique())
+)
+
+# (2) add a multi-select for Sub_Category *in the selected Category (1)
+# Filter the sub-category options down to only those inside the chosen category
+sub_category_options = sorted(
+    df.loc[df["Category"] == category, "Sub_Category"].unique()
+)
+ 
+sub_categories = st.multiselect(
+    "Select one or more Sub-Categories",
+    sub_category_options
+)
+ 
+if not sub_categories:
+    st.info("Pick at least one Sub-Category above to see the chart and the metrics.")
+else:
+    # Rows matching both the selected category and the selected sub-categories
+    filtered = df[
+        (df["Category"] == category) & (df["Sub_Category"].isin(sub_categories))
+    ]
+
+# (3) show a line chart of sales for the selected items in (2)
+# Order_Date is already the index, so Grouper can resample it by month
+    filtered_sales_by_month = (
+        filtered.filter(items=["Sales"]).groupby(pd.Grouper(freq="M")).sum()
+    )
+ 
+    st.write("### Monthly sales for the selected Sub-Categories")
+    st.line_chart(filtered_sales_by_month, y="Sales")
+
+# (4) show three metrics
+# Three metrics: total sales, total profit, overall profit margin
+total_sales = filtered["Sales"].sum()
+total_profit = filtered["Profit"].sum()
+profit_margin = (total_profit / total_sales * 100) if total_sales else 0
+
+# (5) use the delta option in the overall profit margin metric to show the difference between the overall average profit margin (all products across all categories)
+# delta - how the selection's margin compares to the margin of every product across every category
+ overall_profit_margin = df["Profit"].sum() / df["Sales"].sum() * 100
+    margin_delta = profit_margin - overall_profit_margin
+ 
+    st.write("### Metrics for the selected Sub-Categories")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Sales", f"${total_sales:,.2f}")
+    col2.metric("Total Profit", f"${total_profit:,.2f}")
+    col3.metric(
+        "Overall Profit Margin",
+        f"{profit_margin:.2f}%",
+        delta=f"{margin_delta:.2f}%",
+    )
+    st.caption(
+        f"Delta compares against the overall average profit margin of "
+        f"{overall_profit_margin:.2f}% across all products in all categories."
+    )
