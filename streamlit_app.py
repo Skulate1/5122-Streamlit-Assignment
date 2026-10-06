@@ -41,12 +41,12 @@ category = st.selectbox(
 sub_category_options = sorted(
     df.loc[df["Category"] == category, "Sub_Category"].unique()
 )
- 
+
 sub_categories = st.multiselect(
     "Select one or more Sub-Categories",
     sub_category_options
 )
- 
+
 if not sub_categories:
     st.info("Pick at least one Sub-Category above to see the chart and the metrics.")
 else:
@@ -57,9 +57,8 @@ else:
 
 # (3) show a line chart of sales for the selected items in (2)
 # Order_Date is already the index, so Grouper can resample it by month
-filtered_sales_by_month = (
-    filtered.filter(items=["Sales"]).groupby(pd.Grouper(freq="ME")).sum())
- 
+filtered_sales_by_month = filtered.filter(items=["Sales"]).groupby(pd.Grouper(freq="ME")).sum()
+
 st.write("### Monthly sales for the selected Sub-Categories")
 st.line_chart(filtered_sales_by_month, y="Sales")
 
@@ -73,7 +72,7 @@ profit_margin = (total_profit / total_sales * 100) if total_sales else 0
 # delta - how the selection's margin compares to the margin of every product across every category
 overall_profit_margin = df["Profit"].sum() / df["Sales"].sum() * 100
 margin_delta = profit_margin - overall_profit_margin
- 
+
 st.write("### Metrics for the selected Sub-Categories")
 col1, col2, col3 = st.columns(3)
 col1.metric("Total Sales", f"${total_sales:,.2f}")
