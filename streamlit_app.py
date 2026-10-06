@@ -58,7 +58,7 @@ else:
 # (3) show a line chart of sales for the selected items in (2)
 # Order_Date is already the index, so Grouper can resample it by month
 filtered_sales_by_month = filtered.filter(items=["Sales"]).groupby(pd.Grouper(freq="ME")).sum()
-
+ 
 st.write("### Monthly sales for the selected Sub-Categories")
 st.line_chart(filtered_sales_by_month, y="Sales")
 
