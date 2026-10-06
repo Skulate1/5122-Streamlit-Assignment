@@ -73,8 +73,8 @@ profit_margin = (total_profit / total_sales * 100) if total_sales else 0
 
 # (5) use the delta option in the overall profit margin metric to show the difference between the overall average profit margin (all products across all categories)
 # delta - how the selection's margin compares to the margin of every product across every category
- overall_profit_margin = df["Profit"].sum() / df["Sales"].sum() * 100
-    margin_delta = profit_margin - overall_profit_margin
+overall_profit_margin = df["Profit"].sum() / df["Sales"].sum() * 100
+margin_delta = profit_margin - overall_profit_margin
  
     st.write("### Metrics for the selected Sub-Categories")
     col1, col2, col3 = st.columns(3)
