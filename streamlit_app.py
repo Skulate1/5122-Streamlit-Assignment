@@ -87,5 +87,3 @@ else:
         f"{overall_profit_margin:.2f}% across all products in all categories."
 )
 
-st.write(df.index.dtype)
-st.write(sales_by_month.head())
